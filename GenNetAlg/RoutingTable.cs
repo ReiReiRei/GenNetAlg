@@ -27,7 +27,7 @@ namespace GenNetAlg
                 {
                     if (i != j)
                     {
-                        Table[i, j] = weight_set[rnd.Next(0, weight_set.Length-1)];
+                        Table[i, j] = weight_set[rnd.Next(0, weight_set.Length)];
                     }
                     else
                     {
