@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace GenNetAlg
 {
@@ -20,12 +21,14 @@ namespace GenNetAlg
         int initialPopulationSize = 30;
         int firstPoint = 0;
         int lastPoint = 3;
-        int numberOfIterations = 50000;
+        int numberOfIterations = 500;
+        int currentIteration = 0;
         RoutingTable Tb;
         Population Po;
 
         public Form1()
         {
+         
             InitializeComponent();
         }
 
@@ -61,15 +64,21 @@ namespace GenNetAlg
                 Po.Terminate();
                 Populate.Text = Po.ToString();
 
+           
+
 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            
 
             for (int i = 0; i < numberOfIterations; i++)
             {
                 Step();
+               
+                chart1.Series["Max"].Points.AddXY(currentIteration, Po.Chromosomes[0].Weight);
+                currentIteration++;
             }
         }
 
@@ -77,6 +86,7 @@ namespace GenNetAlg
         {
             Tb = new RoutingTable(networkSize);
             Po = new Population(initialPopulationSize, networkSize, firstPoint, lastPoint, Tb);
+            currentIteration = 0;
 
 
 
@@ -95,6 +105,10 @@ namespace GenNetAlg
 
 
             Populate.Text = Po.ToString();
+          
+                chart1.Series["Max"].Points.Clear();
+        
+
         }
         
 
@@ -112,6 +126,8 @@ namespace GenNetAlg
 
         private void button3_Click(object sender, EventArgs e)
         {
+            currentIteration++;
+            chart1.Series["Max"].Points.AddXY(currentIteration, Po.Chromosomes[0].Weight);
             Step();
         }
 
@@ -156,11 +172,32 @@ namespace GenNetAlg
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            Series maxSer = new Series("Max");
+            chart1.Series.Add(maxSer);
+            chart1.Series["Max"].ChartType = SeriesChartType.FastLine;
+            chart1.ChartAreas[0].AxisX = new Axis { LabelStyle = new LabelStyle() { Font = new Font("Arial", 8) } };
+            chart1.ChartAreas[0].AxisY = new Axis { LabelStyle = new LabelStyle() { Font = new Font("Arial", 8) } };
+            chart1.ChartAreas[0].AxisX.Minimum = 0;
+            chart1.ChartAreas[0].BackColor = Color.PaleTurquoise;
+
+
+
             textBox1.Text = initialPopulationSize.ToString();
             textBox2.Text = numberOfIterations.ToString();
             textBox3.Text = networkSize.ToString();
             textBox4.Text = firstPoint.ToString();
             textBox5.Text = lastPoint.ToString();
+
+           
+           
+
+
+
+
+
+
+
+            
 
            
 
